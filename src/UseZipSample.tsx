@@ -9,6 +9,7 @@ const assetsPath = '/assets';
 const urls = {
   atlas: '',
   skel: '',
+  textures: [] as string[],
 };
 
 const getUrl = (path: string) => {
@@ -80,6 +81,7 @@ const UseZipSample: React.FC = () => {
               urls.skel = url;
             } else if (filename.endsWith('.png')) {
               atlasText = atlasText.replace(filename, getBlobId(url));
+              urls.textures.push(url);
             }
           }
         }
@@ -130,6 +132,8 @@ const UseZipSample: React.FC = () => {
 
     assetManager.loadBinary(urls.skel);
     assetManager.loadTextureAtlas(urls.atlas);
+    URL.revokeObjectURL(urls.skel);
+    URL.revokeObjectURL(urls.atlas);
     requestAnimationFrame(load);
   };
 
@@ -149,6 +153,7 @@ const UseZipSample: React.FC = () => {
   ) => {
     const atlas = assetManager.get(urls.atlas);
     const atlasLoader = new window.spine.AtlasAttachmentLoader(atlas);
+    urls.textures.forEach((texture) => URL.revokeObjectURL(texture));
     const skeletonBinary = new window.spine.SkeletonBinary(atlasLoader);
 
     skeletonBinary.scale = 1;
