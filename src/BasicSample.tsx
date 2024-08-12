@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './App.css';
 
+let initState = 0;
 // public下のアセットへアクセス
 const assetsPath = '/assets';
 
@@ -8,9 +9,7 @@ const getUrl = (path: string) => {
   return new URL(path, import.meta.url).href;
 };
 
-const App: React.FC = () => {
-  const [initState, setInitState] = useState(0);
-
+const BasicSample: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   let gl: WebGLRenderingContext | null = null;
   let shader: spine.webgl.Shader;
@@ -32,7 +31,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (initState > 0) return;
-    setInitState(1);
+    initState = 1;
 
     init();
 
@@ -69,7 +68,6 @@ const App: React.FC = () => {
     );
     assetManager = new window.spine.webgl.AssetManager(gl);
 
-    console.log(getUrl(assetsPath + '/haruka/Haruka_home.skel'));
     assetManager.loadBinary(getUrl(assetsPath + '/haruka/Haruka_home.skel'));
     assetManager.loadTextureAtlas(
       getUrl(assetsPath + '/haruka/Haruka_home.atlas')
@@ -181,4 +179,4 @@ const App: React.FC = () => {
   return <canvas ref={canvasRef} id="canvas"></canvas>;
 };
 
-export default App;
+export default BasicSample;
